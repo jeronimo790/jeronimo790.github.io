@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Programa LTCHF</title>
+  <style>
+    :root{font-family: Inter, system-ui, Arial, sans-serif}
+    body{margin:0;background:linear-gradient(135deg,#f6f9ff,#eaf2ff);min-height:100vh;display:flex;align-items:center;justify-content:center}
+    .card{width:90%;max-width:520px;background:white;border-radius:12px;box-shadow:0 10px 30px rgba(20,40,80,0.12);padding:28px;}
+    header{display:flex;flex-direction:column;align-items:center;margin-bottom:18px}
+    h1{margin:0;font-size:20px;letter-spacing:0.2px}
+    .sub{margin-top:6px;color:#5b6b86;font-size:13px;text-align:center}
+    .pw-box{display:flex;gap:8px;margin-top:10px}
+    input[type="password"]{flex:1;padding:10px 12px;border:1px solid #d7e0f5;border-radius:8px;font-size:15px}
+    button{padding:10px 14px;border-radius:8px;border:0;background:#2b6df6;color:white;font-weight:600;cursor:pointer}
+    .message{margin-top:16px;padding:12px;border-radius:8px;font-weight:600}
+    .error{background:#fff2f2;color:#a10000;border:1px solid #f7c6c6}
+    .success{background:#f0fff4;color:#006a2e;border:1px solid #c8f1d0}
+    .content{margin-top:18px;border-top:1px dashed #eef3ff;padding-top:16px;color:#20304a}
+    .show-pw{margin-top:8px;color:#394b66;font-size:13px}
+    footer{margin-top:14px;font-size:13px;color:#6b778f}
+    .hidden{display:none}
+    .back-btn{display:inline-flex;align-items:center;gap:6px;margin-bottom:12px;background:#e8edff;color:#1a2b6d;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
+    a.enlace{color:#2b6df6;font-weight:600;text-decoration:none}
+    ul{padding-left:18px}
+    li{margin-bottom:8px}
+  </style>
+</head>
+<body>
+  <div class="card" id="app">
+    <header>
+      <h1>Programa LTCHF</h1>
+      <div class="sub">Este es un programa creado por Jerónimo Mejía para hacer registros de lectura. Permite anotar libros, autores, fechas, opiniones y muchas otras cosas relacionadas con tus lecturas.</div>
+    </header>
+
+    <div id="login">
+      <div class="pw-box">
+        <input id="passwordInput" type="password" placeholder="Escribe la contraseña" aria-label="contraseña" />
+        <button id="checkBtn" type="button">Entrar</button>
+      </div>
+
+      <div class="show-pw">Recuerda que la contraseña se cambia cada dia. <strong></strong></div>
+      <div id="notice" class="message" style="display:none"></div>
+    </div>
+
+    <div id="mainContent" class="hidden">
+      <div class="message success">Acceso correcto. Bienvenido al Programa Jeronimo Mejia.</div>
+      <div class="content" id="menu">
+        <p>Descripción: Este programa creado por Jerónimo Mejía sirve para registrar lecturas de una forma sencilla. Permite guardar información de libros, capítulos o páginas, copiar y organizar textos, y acceder fácilmente a herramientas externas para procesarlos o analizarlos. Está diseñado para ayudarte a tener tus lecturas bien ordenadas y listas para trabajar con ellas.</p>
+        <h2>Menú principal</h2>
+        <ul>
+          <li><button class="info-btn" type="button">Programa</button></li>
+        </ul>
+      </div>
+
+      <div id="infoSection" class="hidden">
+        <button class="back-btn" id="backToMenu" type="button">⬅ Volver</button>
+        <h2>Guia para utilizar el Programa</h2>
+        <p>A continuación, para manejar el programa necesitas estos pasos:</p>
+        <ol>
+          <li>
+            Toma una captura de cada página
+            Debes una foto de todas las páginas, una por una. <br>
+            <strong>Ejemplo:</strong> si tu primera página es la 54, tómale una foto. Luego selecciona el texto que aparece y cópialo. Para hacerlo, toca el símbolo de la cámara, que está al lado del símbolo de voz.
+            <br><br>
+            Aquí está el enlace para ir: <a class="enlace" href="https://www.google.com/search?q=traductor&sca_esv=8d68d2504fc7931b&hl=es&sxsrf=AE3TifNMGUSFxz_vnZY1CKSZ-VXwx-vf2w%3A1762386512102&source=hp&ei=UOILabDhA8SawbkP-K-bIQ&oq=traduxtor&gs_lp=EhFtb2JpbGUtZ3dzLXdpei1ocCIJdHJhZHV4dG9yKgIIADIHECMYsQIYJzIHEAAYgAQYCjINEAAYgAQYsQMYgwEYCjINEAAYgAQYsQMYgwEYCjIKEAAYgAQYsQMYCjIQEAAYgAQYsQMYgwEYigUYCjINEAAYgAQYsQMYgwEYCjIKEAAYgAQYsQMYCkjZGVCMClisFHACeACQAQCYAcQBoAGZCqoBAzAuObgBAcgBAPgBAZgCC6AC1gqoAi3CAg0QLhjRAxjHARgnGOoCwgIHECMYJxjqAsICBxAuGCcY6gLCAg0QIxjwBRgnGMkCGOoCwgIKECMY8AUYJxjqAsICEBAAGAMYtAIY6gIYjwHYAQHCAhAQLhgDGLQCGOoCGI8B2AEBwgIKECMYgAQYJxiKBcICBBAjGCfCAgsQABiABBixAxiDAcICERAuGIAEGLEDGNEDGIMBGMcBwgIFEAAYgATCAg4QABiABBixAxiDARiKBcICEBAAGIAEGLEDGEMYgwEYigXCAg0QABiABBixAxhDGIoFwgIQEC4YgAQYsQMYQxiDARiKBcICChAAGIAEGEMYigWYAxbxBXp4MUH4idjeugYECAEYCpIHBTIuOC4xoAfdPbIHBTAuOC4xuAe4CsIHCTAuNC42LjAuMcgHOQ&sclient=mobile-gws-wiz-hp" target="_blank" rel="noopener noreferrer">Tocar</a>
+          </li>
+
+          <li>
+           Guarda y organiza el texto
+            Una vez copies el texto, guárdalo. Repite este proceso con todas las páginas o capítulos que necesites. <br>
+            <strong>Ejemplo:</strong> si estás trabajando con los capítulos 11 al 13, guarda todos esos textos.
+Luego entra a la otra aplicación (si no tienes cuenta, créala) y pega el texto completo. <br>Puedes pedirle al programa lo que quieras hacer con cada texto.
+            <strong>Ejemplo:</strong> Capítulo 24: texto…”, “Capítulo 25: texto…”, y así sucesivamente. En resumen, solo copia y pega el contenido.
+            <br><br>
+            Aquí está el enlace para ir: <a class="enlace" href="https://chatgpt.com/?utm_source=google&utm_medium=paidsearch_nonbrand&utm_campaign=GOOG_C_SEM_GNB_Core-Generic_CHT_BAU_ACQ_PER_MIX_ALL_LATAM_CO_ES_052925&utm_term=ia&utm_content=181296596298&utm_ad=755154754207&utm_match=e&gad_source=1&gad_campaignid=22616381516&gbraid=0AAAAA-IW-UUMPkPCP0tTMgaGBBuZzzZXo&gclid=EAIaIQobChMIrM3W7pvckAMVzqJaBR3nIzuSEAAYASAAEgL2CfD_BwE" target="_blank" rel="noopener noreferrer">Tocar</a>
+          </li>
+
+          <li>
+            Repite el proceso con cada capítulo o conjunto de páginas que quieras registrar. Así podrás tener toda tu lectura organizada y lista para trabajar con ella.
+          </li>
+        </ol>
+      </div>
+
+      <footer>Sesión iniciada</footer>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      // Mejoras en el script:
+      // - el botón de entrar tiene type="button" para evitar comportamiento inesperado
+      // - validación más clara, mensajes y guardado en sessionStorage
+      const SECRET = '18118767';
+      const input = document.getElementById('passwordInput');
+      const btn = document.getElementById('checkBtn');
+      const notice = document.getElementById('notice');
+      const login = document.getElementById('login');
+      const main = document.getElementById('mainContent');
+      const menu = document.getElementById('menu');
+      const info = document.getElementById('infoSection');
+      const back = document.getElementById('backToMenu');
+      const infoBtn = document.querySelector('.info-btn');
+
+      function showNotice(text, isOk){
+        notice.textContent = text;
+        notice.className = 'message ' + (isOk ? 'success' : 'error');
+        notice.style.display = 'block';
+      }
+
+      function openMain(){
+        login.classList.add('hidden');
+        main.classList.remove('hidden');
+      }
+
+      // si la sesión ya estaba iniciada
+      if(sessionStorage.getItem('authed') === '1'){
+        openMain();
+      }
+
+      btn.addEventListener('click', function(e){
+        const val = (input.value || '').trim();
+        // seguridad básica: evitar enviar si está vacío
+        if(val.length === 0){
+          showNotice('Escribe la contraseña antes de entrar.', false);
+          return;
+        }
+
+        if(val === SECRET){
+          sessionStorage.setItem('authed','1');
+          showNotice('Contraseña correcta. Accediendo...', true);
+          // pequeña espera para que el usuario vea el mensaje
+          setTimeout(openMain, 350);
+        } else {
+          showNotice('Contraseña incorrecta. Intenta de nuevo.', false);
+        }
+      });
+
+      input.addEventListener('keydown', function(e){
+        if(e.key === 'Enter'){
+          e.preventDefault();
+          btn.click();
+        }
+      });
+
+      if(infoBtn){
+        infoBtn.addEventListener('click', function(){
+          menu.classList.add('hidden');
+          info.classList.remove('hidden');
+        });
+      }
+
+      if(back){
+        back.addEventListener('click', function(){
+          info.classList.add('hidden');
+          menu.classList.remove('hidden');
+        });
+      }
+
+      // función para cerrar sesión si la añades luego (por ahora no hay botón de salir)
+      function logout(){
+        sessionStorage.removeItem('authed');
+        input.value = '';
+        notice.style.display = 'none';
+        main.classList.add('hidden');
+        login.classList.remove('hidden');
+      }
+
+      // Exponer en window para uso futuro (debug)
+      window.__prog = {openMain, logout};
+
+    })();
+  </script>
+</body>
+</html>
